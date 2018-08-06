@@ -1,5 +1,5 @@
 {
-  "name"             : "xervice/github-auth",
+  "name"             : "xervice/github-oauth",
   "license"          : "MIT",
   "authors"          : [
     {
