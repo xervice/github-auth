@@ -1,0 +1,28 @@
+{
+  "name"             : "xervice/github-auth",
+  "license"          : "MIT",
+  "authors"          : [
+    {
+      "name" : "Author name",
+      "email": "author@email.de"
+    }
+  ],
+  "require-dev": {
+    "codeception/codeception": "*",
+    "symfony/var-dumper": "*"
+  },
+  "require": {
+    "php": ">=7.1.0",
+    "xervice/data-provider": "^1.4.4",
+    "guzzle/guzzle": "^3.9.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "XerviceTest\\": "tests/Xervice/",
+      "DataProvider\\": "src/Generated/"
+    },
+    "psr-0": {
+      "Xervice\\": "src/"
+    }
+  }
+}
