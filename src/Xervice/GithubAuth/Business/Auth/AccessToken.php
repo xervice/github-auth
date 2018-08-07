@@ -53,6 +53,9 @@ class AccessToken implements AccessTokenInterface
             'POST',
             $this->accessTokenUrl,
             [
+                'headers'       => [
+                    'Accept' => 'application/json'
+                ],
                 'client_id'     => $this->clientId,
                 'client_secret' => $this->clientSecret,
                 'code'          => $requestDataProvider->getCode(),
@@ -61,13 +64,15 @@ class AccessToken implements AccessTokenInterface
             ]
         );
 
-        parse_str($response->getBody(), $responseData);
+        $responseData = json_decode(
+            $response->getBody(),
+            true
+        );
 
         $tokenResponse = new GithubAccessTokenResponseDataProvider();
         $tokenResponse
             ->setAccessToken($responseData['access_token'])
-            ->setTokenType($responseData['token_type'])
-        ;
+            ->setTokenType($responseData['token_type']);
 
         return $tokenResponse;
     }
