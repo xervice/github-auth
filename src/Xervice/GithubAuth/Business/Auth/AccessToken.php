@@ -21,22 +21,22 @@ class AccessToken implements AccessTokenInterface
     private $clientSecret;
 
     /**
-     * @var string
+     * @var \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
      */
-    private $accessTokenUrl;
+    private $queryBuilder;
 
     /**
      * AccessToken constructor.
      *
      * @param string $clientId
      * @param string $clientSecret
-     * @param string $accessTokenUrl
+     * @param string $queryBuilder
      */
-    public function __construct(string $clientId, string $clientSecret, string $accessTokenUrl)
+    public function __construct(string $clientId, string $clientSecret, string $queryBuilder)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->accessTokenUrl = $accessTokenUrl;
+        $this->queryBuilder = $queryBuilder;
     }
 
     /**
@@ -51,16 +51,11 @@ class AccessToken implements AccessTokenInterface
         $client = new Client();
         $response = $client->request(
             'POST',
-            $this->accessTokenUrl,
+            $this->getAccessTokenUrl(),
             [
                 'headers'       => [
                     'Accept' => 'application/json'
-                ],
-                'client_id'     => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'code'          => $requestDataProvider->getCode(),
-                'redirect_uri'  => $requestDataProvider->getRedirectUrl(),
-                'state'         => $requestDataProvider->getState(),
+                ]
             ]
         );
 
@@ -75,5 +70,24 @@ class AccessToken implements AccessTokenInterface
             ->setTokenType($responseData['token_type']);
 
         return $tokenResponse;
+    }
+
+    /**
+     * @param \DataProvider\GithubAccessTokenRequestDataProvider $requestDataProvider
+     *
+     * @return string
+     */
+    private function getAccessTokenUrl(GithubAccessTokenRequestDataProvider $requestDataProvider): string
+    {
+        $this->queryBuilder->appendParams(
+            [
+                'client_id'     => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'code'          => $requestDataProvider->getCode(),
+                'redirect_uri'  => $requestDataProvider->getRedirectUrl(),
+                'state'         => $requestDataProvider->getState()
+            ]
+        );
+        return $this->queryBuilder->getUrl();
     }
 }

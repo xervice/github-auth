@@ -35,7 +35,9 @@ class GithubAuthFactory extends AbstractFactory
         return new AccessToken(
             $this->getConfig()->getClientId(),
             $this->getConfig()->getClientSecret(),
-            $this->getConfig()->getAccessTokenUrl()
+            $this->createQueryBuilder(
+                $this->getConfig()->getAccessTokenUrl()
+            )
         );
     }
 
