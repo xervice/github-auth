@@ -14,7 +14,7 @@
   "require": {
     "php": ">=7.1.0",
     "xervice/data-provider": "^1.4.4",
-    "guzzle/guzzle": "^3.9.3"
+    "guzzlehttp/guzzle": "^6.3.3"
   },
   "autoload": {
     "psr-4": {
