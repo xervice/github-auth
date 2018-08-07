@@ -7,6 +7,7 @@ namespace Xervice\GithubAuth\Business\Auth;
 use DataProvider\GithubAccessTokenRequestDataProvider;
 use DataProvider\GithubAccessTokenResponseDataProvider;
 use GuzzleHttp\Client;
+use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
 
 class AccessToken implements AccessTokenInterface
 {
@@ -32,7 +33,7 @@ class AccessToken implements AccessTokenInterface
      * @param string $clientSecret
      * @param string $queryBuilder
      */
-    public function __construct(string $clientId, string $clientSecret, string $queryBuilder)
+    public function __construct(string $clientId, string $clientSecret, QueryBuilderInterface $queryBuilder)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
