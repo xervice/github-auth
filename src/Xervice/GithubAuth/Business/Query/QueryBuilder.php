@@ -27,7 +27,7 @@ class QueryBuilder implements QueryBuilderInterface
     public function appendParams(array $params): void
     {
         $urlData = parse_url($this->url);
-        if (!isset($urlData['query'])) {
+        if (isset($urlData['query'])) {
             parse_str($urlData['query'], $queryData);
             $queryData = array_merge($queryData, $params);
         } else {
