@@ -48,10 +48,9 @@ class AccessToken implements AccessTokenInterface
      */
     public function getAccessToken(
         GithubAccessTokenRequestDataProvider $requestDataProvider
-    ): void {
+    ): GithubAccessTokenResponseDataProvider {
         $client = new Client();
-
-        $client->request(
+        $response = $client->request(
             'POST',
             $this->getAccessTokenUrl($requestDataProvider),
             [
@@ -60,6 +59,18 @@ class AccessToken implements AccessTokenInterface
                 ]
             ]
         );
+
+        $responseData = json_decode(
+            $response->getBody(),
+            true
+        );
+
+        $tokenResponse = new GithubAccessTokenResponseDataProvider();
+        $tokenResponse
+            ->setAccessToken($responseData['access_token'])
+            ->setTokenType($responseData['token_type']);
+
+        return $tokenResponse;
     }
 
     /**
