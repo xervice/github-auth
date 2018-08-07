@@ -31,7 +31,7 @@ class AccessToken implements AccessTokenInterface
      *
      * @param string $clientId
      * @param string $clientSecret
-     * @param string $queryBuilder
+     * @param \Xervice\GithubAuth\Business\Query\QueryBuilderInterface $queryBuilder
      */
     public function __construct(string $clientId, string $clientSecret, QueryBuilderInterface $queryBuilder)
     {
@@ -52,7 +52,7 @@ class AccessToken implements AccessTokenInterface
         $client = new Client();
         $response = $client->request(
             'POST',
-            $this->getAccessTokenUrl(),
+            $this->getAccessTokenUrl($requestDataProvider),
             [
                 'headers'       => [
                     'Accept' => 'application/json'
