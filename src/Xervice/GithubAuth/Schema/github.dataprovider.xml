@@ -14,9 +14,9 @@
     </DataProvider>
 
     <DataProvider name="GithubAccessTokenRequest">
-        <DataElement name="RedirectUrl" type="string"/>
+        <DataElement name="RedirectUrl" default="/" type="string"/>
         <DataElement name="Code" type="string"/>
-        <DataElement name="State" type="string"/>
+        <DataElement name="State" default="''" type="string"/>
     </DataProvider>
 
     <DataProvider name="GithubAccessTokenResponse">
