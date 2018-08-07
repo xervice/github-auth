@@ -14,5 +14,5 @@ interface AccessTokenInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAccessToken(GithubAccessTokenRequestDataProvider $requestDataProvider
-    ): GithubAccessTokenResponseDataProvider;
+    ): void;
 }
