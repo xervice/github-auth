@@ -7,6 +7,7 @@ namespace Xervice\GithubAuth\Business\Auth;
 use DataProvider\GithubAccessTokenRequestDataProvider;
 use DataProvider\GithubAccessTokenResponseDataProvider;
 use GuzzleHttp\Client;
+use Xervice\GithubAuth\Business\Exception\GithubException;
 use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
 
 class AccessToken implements AccessTokenInterface
@@ -45,6 +46,7 @@ class AccessToken implements AccessTokenInterface
      *
      * @return \DataProvider\GithubAccessTokenResponseDataProvider
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Xervice\GithubAuth\Business\Exception\GithubException
      */
     public function getAccessToken(
         GithubAccessTokenRequestDataProvider $requestDataProvider
@@ -64,6 +66,10 @@ class AccessToken implements AccessTokenInterface
             $response->getBody(),
             true
         );
+
+        if (!isset($responseData['access_token'])) {
+            throw new GithubException($responseData['error'] ?? 'No access token from github');
+        }
 
         $tokenResponse = new GithubAccessTokenResponseDataProvider();
         $tokenResponse
