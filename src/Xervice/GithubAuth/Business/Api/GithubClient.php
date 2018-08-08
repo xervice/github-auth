@@ -10,6 +10,21 @@ use GuzzleHttp\Client;
 class GithubClient implements GithubClientInterface
 {
     /**
+     * @var string
+     */
+    private $apiBaseUrl;
+
+    /**
+     * GithubClient constructor.
+     *
+     * @param string $apiBaseUrl
+     */
+    public function __construct(string $apiBaseUrl)
+    {
+        $this->apiBaseUrl = $apiBaseUrl;
+    }
+
+    /**
      * @param \DataProvider\GithubRequestDataProvider $requestDataProvider
      * @param array $params
      *
@@ -21,7 +36,7 @@ class GithubClient implements GithubClientInterface
         $client = new Client();
         $response = $client->request(
             'GET',
-            $requestDataProvider->getApiUrl(),
+            $this->apiBaseUrl . $requestDataProvider->getApiUrl(),
             array_merge(
                 [
                     'headers' => [

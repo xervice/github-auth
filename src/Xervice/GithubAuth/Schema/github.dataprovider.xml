@@ -6,13 +6,6 @@
   xsi:schemaLocation="xervice:dataprovider-01 http://static.xervice.online/schema/dataprovider.schema.xsd"
 >
 
-    <DataProvider name="GithubAuthRequest">
-        <DataElement name="Scope" type="string"/>
-        <DataElement name="RedirectUrl" type="string"/>
-        <DataElement name="State" default="''" type="string"/>
-        <DataElement name="AllowSignup" default="true" type="string"/>
-    </DataProvider>
-
     <DataProvider name="GithubAccessTokenRequest">
         <DataElement name="RedirectUrl" default="/" type="string"/>
         <DataElement name="Code" type="string"/>

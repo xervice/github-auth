@@ -14,18 +14,15 @@ class QueryBuilderTest extends \Codeception\Test\Unit
      */
     public function testAppendParam()
     {
-        $queryBuilder = new QueryBuilder();
-        $url = 'http://api.mytest.com/myTest?param1=test.test';
-
-        $queryBuilder->setUrl($url);
-        $queryBuilder->appendParams(
+        $queryBuilder = new QueryBuilder(
+            'http://api.mytest.com/myTest?param1=test.test',
             [
                 'param2' => 'test2.test2'
             ]
         );
 
         $this->assertEquals(
-            $url .= '&param2=test2.test2',
+            'http://api.mytest.com/myTest?param1=test.test&param2=test2.test2',
             $queryBuilder->getUrl()
         );
     }
@@ -39,11 +36,8 @@ class QueryBuilderTest extends \Codeception\Test\Unit
      */
     public function testAppendParamWithChange()
     {
-        $queryBuilder = new QueryBuilder();
-        $url = 'http://api.mytest.com/myTest?param1=test.test';
-
-        $queryBuilder->setUrl($url);
-        $queryBuilder->appendParams(
+        $queryBuilder = new QueryBuilder(
+            'http://api.mytest.com/myTest?param1=test.test',
             [
                 'param1' => 'testC.testC',
                 'param2' => 'test2.test2'

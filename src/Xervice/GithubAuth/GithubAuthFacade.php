@@ -17,13 +17,14 @@ use Xervice\Core\Facade\AbstractFacade;
 class GithubAuthFacade extends AbstractFacade
 {
     /**
-     * @param \DataProvider\GithubAuthRequestDataProvider $authDataProvider
+     * @param string $scope
+     * @param string $state
      *
      * @return string
      */
-    public function authForGithub(GithubAuthRequestDataProvider $authDataProvider): string
+    public function getGithubAuthUrl(string $scope, string $state = null): string
     {
-        $this->getFactory()->createRedirector()->redirectToAuth($authDataProvider);
+        $this->getFactory()->createGithubAuthUrl($scope, $state);
     }
 
     /**

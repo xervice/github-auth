@@ -14,7 +14,11 @@
   "require": {
     "php": ">=7.1.0",
     "xervice/data-provider": "^1.4.4",
-    "guzzlehttp/guzzle": "^6.3.3"
+    "xervice/user": "^1.1.1",
+    "xervice/controller": "1.2.0",
+    "xervice/logger": "^1.0.0",
+    "guzzlehttp/guzzle": "^6.3.3",
+    "propel/propel": "2.0.0-alpha8"
   },
   "autoload": {
     "psr-4": {
@@ -22,7 +26,8 @@
       "DataProvider\\": "src/Generated/"
     },
     "psr-0": {
-      "Xervice\\": "src/"
+      "Xervice\\": "src/",
+      "Orm\\": "src/"
     }
   }
 }

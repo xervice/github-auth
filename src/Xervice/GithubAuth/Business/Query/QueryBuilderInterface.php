@@ -6,8 +6,10 @@ interface QueryBuilderInterface
 {
     /**
      * @param array $params
+     *
+     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
      */
-    public function appendParams(array $params): void;
+    public function appendParams(array $params): QueryBuilderInterface;
 
     /**
      * @param string $url

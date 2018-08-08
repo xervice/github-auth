@@ -15,16 +15,20 @@ class QueryBuilder implements QueryBuilderInterface
      * QueryBuilder constructor.
      *
      * @param string $url
+     * @param array $params
      */
-    public function __construct(string $url = null)
+    public function __construct(string $url = null, array $params = [])
     {
         $this->url = $url;
+        $this->appendParams($params);
     }
 
     /**
      * @param array $params
+     *
+     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
      */
-    public function appendParams(array $params): void
+    public function appendParams(array $params): QueryBuilderInterface
     {
         $urlData = parse_url($this->url);
         if (isset($urlData['query'])) {
@@ -46,6 +50,8 @@ class QueryBuilder implements QueryBuilderInterface
                 $urlData['query']
             );
         }
+
+        return $this;
     }
 
     /**
