@@ -41,7 +41,7 @@ class GithubController extends AbstractController
      */
     public function githubAuthAction(Request $request): Response
     {
-        $redirect = new RedirectResponse(GithubAuthConfig::AFTER_LOGIN_PATH)
+        $redirect = new RedirectResponse(GithubAuthConfig::AFTER_LOGIN_PATH);
 
         try {
             $this->getFactory()->getUserFacade()->login(
