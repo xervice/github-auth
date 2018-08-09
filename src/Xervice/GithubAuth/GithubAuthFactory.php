@@ -42,7 +42,8 @@ class GithubAuthFactory extends AbstractFactory
         return new GithubAuth(
             $this->getUserFacade(),
             $this->createAccessToken(),
-            $this->createGithubClient()
+            $this->createGithubClient(),
+            $this->createRedirectQueryBuilder(GithubAuthConfig::ERROR_PATH)
         );
     }
 

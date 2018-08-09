@@ -13,6 +13,7 @@ use DataProvider\UserDataProvider;
 use DataProvider\UserLoginDataProvider;
 use Xervice\GithubAuth\Business\Api\GithubClientInterface;
 use Xervice\GithubAuth\Business\Auth\AccessTokenInterface;
+use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
 use Xervice\GithubAuth\GithubAuthConfig;
 use Xervice\User\UserFacade;
 
@@ -34,19 +35,28 @@ class GithubAuth implements GithubAuthInterface
     private $githubClient;
 
     /**
+     * @var \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     */
+    private $errorUrl;
+
+    /**
      * GithubAuth constructor.
      *
      * @param \Xervice\User\UserFacade $userFacade
      * @param \Xervice\GithubAuth\Business\Auth\AccessTokenInterface $accessToken
+     * @param \Xervice\GithubAuth\Business\Api\GithubClientInterface $githubClient
+     * @param \Xervice\GithubAuth\Business\Query\QueryBuilderInterface $errorUrl
      */
     public function __construct(
         UserFacade $userFacade,
         AccessTokenInterface $accessToken,
-        GithubClientInterface $githubClient
+        GithubClientInterface $githubClient,
+        QueryBuilderInterface $errorUrl
     ) {
         $this->userFacade = $userFacade;
         $this->accessToken = $accessToken;
         $this->githubClient = $githubClient;
+        $this->errorUrl = $errorUrl;
     }
 
     /**
@@ -116,7 +126,7 @@ class GithubAuth implements GithubAuthInterface
         $token
             ->setCode($code)
             ->setRedirectUrl(
-                $this->getFactory()->createRedirectQueryBuilder(GithubAuthConfig::ERROR_PATH)
+                $this->errorUrl->getUrl()
             );
 
         return $this->accessToken->getAccessToken($token);
