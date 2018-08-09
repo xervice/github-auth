@@ -41,20 +41,10 @@ class GithubController extends AbstractController
      */
     public function githubAuthAction(Request $request): Response
     {
-        $redirect = new RedirectResponse(GithubAuthConfig::AFTER_LOGIN_PATH);
-
-        try {
-            $this->getFactory()->getUserFacade()->login(
-                $this->getFactory()->createGithubAuth()->createUserFromGithub($request)
-            );
-        } catch (GithubException $exception) {
-            $message = new LogMessageDataProvider();
-            $message
-                ->setTitle($exception->getMessage())
-                ->setContext($exception->getCode());
-            $this->getFactory()->getLoggerFacade()->log($message);
-
-            $redirect = new RedirectResponse(GithubAuthConfig::AFTER_ERROR_PATH . '?error=1');
+        if ($request->query->has('code')) {
+            $redirect = $this->createUserFromGithub($request);
+        } else {
+            $redirect = $this->createErrorRedirect();
         }
 
         return $redirect;
@@ -64,6 +54,7 @@ class GithubController extends AbstractController
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \InvalidArgumentException
      * @throws \Core\Locator\Dynamic\ServiceNotParseable
      */
     public function githubError(Request $request): Response
@@ -78,5 +69,49 @@ class GithubController extends AbstractController
         return new RedirectResponse(
             GithubAuthConfig::AFTER_ERROR_PATH . '?error=' . $request->query->get('error')
         );
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \InvalidArgumentException
+     * @throws \Core\Locator\Dynamic\ServiceNotParseable
+     * @throws \Xervice\User\Business\Exception\UserException
+     */
+    private function createUserFromGithub(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        $redirect = new RedirectResponse(GithubAuthConfig::AFTER_LOGIN_PATH);
+
+        try {
+            $this->getFactory()->getUserFacade()->login(
+                $this->getFactory()->createGithubAuth()->createUserFromGithub($request->query->get('code'))
+            );
+        } catch (GithubException $exception) {
+            $message = new LogMessageDataProvider();
+            $message
+                ->setTitle($exception->getMessage())
+                ->setContext($exception->getCode());
+            $this->getFactory()->getLoggerFacade()->log($message);
+
+            $redirect = new RedirectResponse(GithubAuthConfig::AFTER_ERROR_PATH . '?error=1');
+        }
+        return $redirect;
+}
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \InvalidArgumentException
+     * @throws \Core\Locator\Dynamic\ServiceNotParseable
+     */
+    private function createErrorRedirect(): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        $message = new LogMessageDataProvider();
+        $message
+            ->setTitle('Github not auth from code');
+        $this->getFactory()->getLoggerFacade()->log($message);
+
+        $redirect = new RedirectResponse(GithubAuthConfig::AFTER_ERROR_PATH . '?error=1');
+        return $redirect;
     }
 }
