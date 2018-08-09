@@ -26,7 +26,7 @@ class GithubController extends AbstractController
     public function githubLoginAction(): Response
     {
         return new RedirectResponse(
-            $this->getFacade()->getGithubAuthUrl('read:user,user:email')
+            $this->getFacade()->getGithubAuthUrl('read:user,user:email')->getUrl()
         );
     }
 

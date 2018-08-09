@@ -73,7 +73,7 @@ class GithubAuthFactory extends AbstractFactory
             [
                 'client_id'    => $this->getConfig()->getClientId(),
                 'scope'        => $scope,
-                'redirect_uri' => $this->createRedirectQueryBuilder(GithubAuthConfig::AUTH_PATH),
+                'redirect_uri' => $this->createRedirectQueryBuilder(GithubAuthConfig::AUTH_PATH)->getUrl(),
                 'allow_signup' => $this->getConfig()->getAllowSignup(),
                 'state'        => $state
             ]

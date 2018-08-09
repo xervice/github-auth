@@ -8,6 +8,7 @@ use DataProvider\GithubAccessTokenRequestDataProvider;
 use DataProvider\GithubAccessTokenResponseDataProvider;
 use DataProvider\GithubAuthRequestDataProvider;
 use Xervice\Core\Facade\AbstractFacade;
+use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
 
 /**
  * @method \Xervice\GithubAuth\GithubAuthFactory getFactory()
@@ -20,11 +21,11 @@ class GithubAuthFacade extends AbstractFacade
      * @param string $scope
      * @param string $state
      *
-     * @return string
+     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
      */
-    public function getGithubAuthUrl(string $scope, string $state = null): string
+    public function getGithubAuthUrl(string $scope, string $state = null): QueryBuilderInterface
     {
-        $this->getFactory()->createGithubAuthUrl($scope, $state);
+        return $this->getFactory()->createGithubAuthUrl($scope, $state);
     }
 
     /**

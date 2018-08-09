@@ -69,4 +69,14 @@ class QueryBuilder implements QueryBuilderInterface
     {
         return $this->url;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getUrl();
+    }
+
+
 }

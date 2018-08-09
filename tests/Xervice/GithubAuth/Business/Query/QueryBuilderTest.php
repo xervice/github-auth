@@ -1,5 +1,5 @@
 <?php
-namespace XerviceTest\GithubOAuth\Business\Query;
+namespace XerviceTest\GithubAuth\Business\Query;
 
 use Xervice\GithubAuth\Business\Query\QueryBuilder;
 
