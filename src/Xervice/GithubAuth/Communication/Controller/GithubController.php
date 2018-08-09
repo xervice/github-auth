@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Xervice\Controller\Business\Controller\AbstractController;
+use Xervice\GithubAuth\Business\Exception\GithubException;
 use Xervice\GithubAuth\GithubAuthConfig;
 
 /**
@@ -40,11 +41,23 @@ class GithubController extends AbstractController
      */
     public function githubAuthAction(Request $request): Response
     {
-        $this->getFactory()->getUserFacade()->login(
-            $this->getFactory()->createGithubAuth()->createUserFromGithub($request)
-        );
+        $redirect = new RedirectResponse(GithubAuthConfig::AFTER_LOGIN_PATH)
 
-        return new RedirectResponse(GithubAuthConfig::AFTER_LOGIN_PATH);
+        try {
+            $this->getFactory()->getUserFacade()->login(
+                $this->getFactory()->createGithubAuth()->createUserFromGithub($request)
+            );
+        } catch (GithubException $exception) {
+            $message = new LogMessageDataProvider();
+            $message
+                ->setTitle($exception->getMessage())
+                ->setContext($exception->getCode());
+            $this->getFactory()->getLoggerFacade()->log($message);
+
+            $redirect = new RedirectResponse(GithubAuthConfig::AFTER_ERROR_PATH . '?error=1');
+        }
+
+        return $redirect;
     }
 
     /**
