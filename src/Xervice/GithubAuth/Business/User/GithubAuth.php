@@ -86,6 +86,13 @@ class GithubAuth implements GithubAuthInterface
             $login = $this->getGithubLoginType($token);
             $user->addUserLogin($login);
             $this->userFacade->updateUser($user);
+        } else {
+            foreach ($user->getUserLogins() as $login) {
+                if ($login->getType() === 'Github') {
+                    $login->getUserCredential()->setHash($token->getAccessToken());
+                    $this->userFacade->updateCredential($login->getUserCredential());
+                }
+            }
         }
 
         $auth = new UserAuthDataProvider();
