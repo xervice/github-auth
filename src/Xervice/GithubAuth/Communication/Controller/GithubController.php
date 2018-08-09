@@ -90,8 +90,9 @@ class GithubController extends AbstractController
         } catch (GithubException $exception) {
             $message = new LogMessageDataProvider();
             $message
-                ->setTitle($exception->getMessage())
-                ->setContext($exception->getCode());
+                ->setTitle(get_class($exception))
+                ->setMessage($exception->getMessage())
+                ->setContext($exception->getTraceAsString());
             $this->getFactory()->getLoggerFacade()->log($message);
 
             $redirect = new RedirectResponse(GithubAuthConfig::AFTER_ERROR_PATH . '?error=1');
@@ -108,7 +109,8 @@ class GithubController extends AbstractController
     {
         $message = new LogMessageDataProvider();
         $message
-            ->setTitle('Github not auth from code');
+            ->setTitle('Github oAuth Error')
+            ->setMessage('Github no auth from code');
         $this->getFactory()->getLoggerFacade()->log($message);
 
         $redirect = new RedirectResponse(GithubAuthConfig::AFTER_ERROR_PATH . '?error=1');
