@@ -5,7 +5,6 @@ namespace Xervice\GithubAuth\Communication;
 
 
 use Xervice\Core\Business\Model\Factory\AbstractCommunicationFactory;
-use Xervice\GithubAuth\GithubAuthDependencyProvider;
 use Xervice\Logger\Business\LoggerFacade;
 use Xervice\User\Business\UserFacade;
 
