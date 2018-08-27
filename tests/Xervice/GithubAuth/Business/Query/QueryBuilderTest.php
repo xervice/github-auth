@@ -1,7 +1,7 @@
 <?php
 namespace XerviceTest\GithubAuth\Business\Query;
 
-use Xervice\GithubAuth\Business\Query\QueryBuilder;
+use Xervice\GithubAuth\Business\Model\Query\QueryBuilder;
 
 class QueryBuilderTest extends \Codeception\Test\Unit
 {

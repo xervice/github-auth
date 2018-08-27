@@ -1,10 +1,9 @@
 <?php
-
+declare(strict_types=1);
 
 namespace Xervice\GithubAuth;
 
-
-use Xervice\Core\Config\AbstractConfig;
+use Xervice\Core\Business\Model\Config\AbstractConfig;
 
 class GithubAuthConfig extends AbstractConfig
 {

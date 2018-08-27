@@ -4,25 +4,23 @@
 namespace Xervice\GithubAuth\Communication\Controller;
 
 
-use DataProvider\GithubAuthRequestDataProvider;
 use DataProvider\LogMessageDataProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Xervice\Controller\Business\Controller\AbstractController;
+use Xervice\Controller\Communication\Controller\AbstractController;
 use Xervice\GithubAuth\Business\Exception\GithubException;
 use Xervice\GithubAuth\GithubAuthConfig;
 
 /**
- * @method \Xervice\GithubAuth\GithubAuthFacade getFacade()
- * @method \Xervice\GithubAuth\GithubAuthFactory getFactory()
+ * @method \Xervice\GithubAuth\Business\GithubAuthFacade getFacade()
+ * @method \Xervice\GithubAuth\Communication\GithubAuthCommunicationFactory getFactory()
  */
 class GithubController extends AbstractController
 {
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \InvalidArgumentException
-     * @throws \Core\Locator\Dynamic\ServiceNotParseable
      */
     public function githubLoginAction(): Response
     {
@@ -36,7 +34,6 @@ class GithubController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \InvalidArgumentException
-     * @throws \Core\Locator\Dynamic\ServiceNotParseable
      * @throws \Xervice\User\Business\Exception\UserException
      */
     public function githubAuthAction(Request $request): Response
@@ -55,7 +52,6 @@ class GithubController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \InvalidArgumentException
-     * @throws \Core\Locator\Dynamic\ServiceNotParseable
      */
     public function githubError(Request $request): Response
     {
@@ -75,8 +71,6 @@ class GithubController extends AbstractController
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \InvalidArgumentException
-     * @throws \Core\Locator\Dynamic\ServiceNotParseable
      * @throws \Xervice\User\Business\Exception\UserException
      */
     private function createUserFromGithub(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
@@ -85,7 +79,7 @@ class GithubController extends AbstractController
 
         try {
             $this->getFactory()->getUserFacade()->login(
-                $this->getFactory()->createGithubAuth()->createUserFromGithub($request->query->get('code'))
+                $this->getFacade()->createUserFromGithub($request->query->get('code'))
             );
         } catch (GithubException $exception) {
             $message = new LogMessageDataProvider();
@@ -103,7 +97,6 @@ class GithubController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \InvalidArgumentException
-     * @throws \Core\Locator\Dynamic\ServiceNotParseable
      */
     private function createErrorRedirect(): \Symfony\Component\HttpFoundation\RedirectResponse
     {

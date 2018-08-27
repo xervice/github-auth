@@ -1,31 +1,30 @@
 <?php
 
 
-namespace Xervice\GithubAuth;
+namespace Xervice\GithubAuth\Business;
 
 
-use Xervice\Core\Factory\AbstractFactory;
-use Xervice\GithubAuth\Business\Api\GithubClient;
-use Xervice\GithubAuth\Business\Api\GithubClientInterface;
-use Xervice\GithubAuth\Business\Auth\AccessToken;
-use Xervice\GithubAuth\Business\Auth\AccessTokenInterface;
-use Xervice\GithubAuth\Business\Auth\Redirector;
-use Xervice\GithubAuth\Business\Auth\RedirectorInterface;
-use Xervice\GithubAuth\Business\Query\QueryBuilder;
-use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
-use Xervice\GithubAuth\Business\User\GithubAuth;
-use Xervice\GithubAuth\Business\User\GithubAuthInterface;
-use Xervice\GithubAuth\Communication\Controller\GithubController;
-use Xervice\Logger\LoggerFacade;
-use Xervice\User\UserFacade;
+use Xervice\Core\Business\Model\Factory\AbstractBusinessFactory;
+use Xervice\GithubAuth\Business\Model\Api\GithubClient;
+use Xervice\GithubAuth\Business\Model\Api\GithubClientInterface;
+use Xervice\GithubAuth\Business\Model\Auth\AccessToken;
+use Xervice\GithubAuth\Business\Model\Auth\AccessTokenInterface;
+use Xervice\GithubAuth\Business\Model\Query\QueryBuilder;
+use Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface;
+use Xervice\GithubAuth\Business\Model\User\GithubAuth;
+use Xervice\GithubAuth\Business\Model\User\GithubAuthInterface;
+use Xervice\GithubAuth\GithubAuthConfig;
+use Xervice\GithubAuth\GithubAuthDependencyProvider;
+use Xervice\Logger\Business\LoggerFacade;
+use Xervice\User\Business\UserFacade;
 
 /**
  * @method \Xervice\GithubAuth\GithubAuthConfig getConfig()
  */
-class GithubAuthFactory extends AbstractFactory
+class GithubAuthBusinessFactory extends AbstractBusinessFactory
 {
     /**
-     * @return \Xervice\GithubAuth\Business\Api\GithubClientInterface
+     * @return \Xervice\GithubAuth\Business\Model\Api\GithubClientInterface
      */
     public function createGithubClient(): GithubClientInterface
     {
@@ -35,7 +34,7 @@ class GithubAuthFactory extends AbstractFactory
     }
 
     /**
-     * @return \Xervice\GithubAuth\Business\User\GithubAuthInterface
+     * @return \Xervice\GithubAuth\Business\Model\User\GithubAuthInterface
      */
     public function createGithubAuth(): GithubAuthInterface
     {
@@ -48,7 +47,7 @@ class GithubAuthFactory extends AbstractFactory
     }
 
     /**
-     * @return \Xervice\GithubAuth\Business\Auth\AccessTokenInterface
+     * @return \Xervice\GithubAuth\Business\Model\Auth\AccessTokenInterface
      */
     public function createAccessToken(): AccessTokenInterface
     {
@@ -65,9 +64,9 @@ class GithubAuthFactory extends AbstractFactory
      * @param string $scope
      * @param string|null $state
      *
-     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @return \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
-    public function createGithubAuthUrl(string $scope, string $state = null)
+    public function createGithubAuthUrl(string $scope, string $state = null): QueryBuilderInterface
     {
         return $this->createQueryBuilder(
             $this->getConfig()->getAuthUrl(),
@@ -85,7 +84,7 @@ class GithubAuthFactory extends AbstractFactory
      * @param string $path
      * @param array $params
      *
-     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @return \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
     public function createRedirectQueryBuilder(string $path, array $params = []): QueryBuilderInterface
     {
@@ -97,10 +96,9 @@ class GithubAuthFactory extends AbstractFactory
 
     /**
      * @param string|null $url
-     *
      * @param array $params
      *
-     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @return \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
     public function createQueryBuilder(string $url = null, array $params = []): QueryBuilderInterface
     {
@@ -108,18 +106,10 @@ class GithubAuthFactory extends AbstractFactory
     }
 
     /**
-     * @return \Xervice\User\UserFacade
+     * @return \Xervice\User\Business\UserFacade
      */
     public function getUserFacade(): UserFacade
     {
         return $this->getDependency(GithubAuthDependencyProvider::USER_FACADE);
-    }
-
-    /**
-     * @return \Xervice\Logger\LoggerFacade
-     */
-    public function getLoggerFacade(): LoggerFacade
-    {
-        return $this->getDependency(GithubAuthDependencyProvider::LOG_FACADE);
     }
 }

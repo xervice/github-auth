@@ -1,22 +1,20 @@
 <?php
 namespace XerviceTest\GithubAuth;
 
-use Xervice\Core\Locator\Dynamic\DynamicLocator;
+use Xervice\Core\Business\Model\Locator\Dynamic\Business\DynamicBusinessLocator;
 
 /**
- * @method \Xervice\GithubAuth\GithubAuthFacade getFacade()
+ * @method \Xervice\GithubAuth\Business\GithubAuthFacade getFacade()
  */
 class FacadeTest extends \Codeception\Test\Unit
 {
-    use DynamicLocator;
+    use DynamicBusinessLocator;
 
     /**
      * @group Xervice
      * @group GithubAuth
      * @group Facade
      * @group Integration
-     *
-     * @throws \Core\Locator\Dynamic\ServiceNotParseable
      */
     public function testGet()
     {

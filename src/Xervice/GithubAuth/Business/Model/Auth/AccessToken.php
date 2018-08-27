@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Xervice\GithubAuth\Business\Auth;
+namespace Xervice\GithubAuth\Business\Model\Auth;
 
 
 use DataProvider\GithubAccessTokenRequestDataProvider;
 use DataProvider\GithubAccessTokenResponseDataProvider;
 use GuzzleHttp\Client;
 use Xervice\GithubAuth\Business\Exception\GithubException;
-use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
+use Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface;
 
 class AccessToken implements AccessTokenInterface
 {
@@ -23,7 +23,7 @@ class AccessToken implements AccessTokenInterface
     private $clientSecret;
 
     /**
-     * @var \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @var \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
     private $queryBuilder;
 
@@ -32,7 +32,7 @@ class AccessToken implements AccessTokenInterface
      *
      * @param string $clientId
      * @param string $clientSecret
-     * @param \Xervice\GithubAuth\Business\Query\QueryBuilderInterface $queryBuilder
+     * @param \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface $queryBuilder
      */
     public function __construct(string $clientId, string $clientSecret, QueryBuilderInterface $queryBuilder)
     {
@@ -45,8 +45,6 @@ class AccessToken implements AccessTokenInterface
      * @param \DataProvider\GithubAccessTokenRequestDataProvider $requestDataProvider
      *
      * @return \DataProvider\GithubAccessTokenResponseDataProvider
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Xervice\GithubAuth\Business\Exception\GithubException
      */
     public function getAccessToken(
         GithubAccessTokenRequestDataProvider $requestDataProvider

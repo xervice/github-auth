@@ -1,6 +1,6 @@
 <?php
 
-namespace Xervice\GithubAuth\Business\Api;
+namespace Xervice\GithubAuth\Business\Model\Api;
 
 use DataProvider\GithubRequestDataProvider;
 
@@ -11,7 +11,6 @@ interface GithubClientInterface
      * @param array $params
      *
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getFromGithub(GithubRequestDataProvider $requestDataProvider, ...$params): array;
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Xervice\GithubAuth\Business\Query;
+namespace Xervice\GithubAuth\Business\Model\Query;
 
 
 class QueryBuilder implements QueryBuilderInterface
@@ -19,14 +19,14 @@ class QueryBuilder implements QueryBuilderInterface
      */
     public function __construct(string $url = null, array $params = [])
     {
-        $this->url = $url;
+        $this->url = $url ?: '';
         $this->appendParams($params);
     }
 
     /**
      * @param array $params
      *
-     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @return \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
     public function appendParams(array $params): QueryBuilderInterface
     {

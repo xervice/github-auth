@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Xervice\GithubAuth\Business\User;
+namespace Xervice\GithubAuth\Business\Model\User;
 
 
 use DataProvider\GithubAccessTokenRequestDataProvider;
@@ -11,41 +11,40 @@ use DataProvider\UserAuthDataProvider;
 use DataProvider\UserCredentialDataProvider;
 use DataProvider\UserDataProvider;
 use DataProvider\UserLoginDataProvider;
-use Xervice\GithubAuth\Business\Api\GithubClientInterface;
-use Xervice\GithubAuth\Business\Auth\AccessTokenInterface;
-use Xervice\GithubAuth\Business\Query\QueryBuilderInterface;
-use Xervice\GithubAuth\GithubAuthConfig;
-use Xervice\User\UserFacade;
+use Xervice\GithubAuth\Business\Model\Api\GithubClientInterface;
+use Xervice\GithubAuth\Business\Model\Auth\AccessTokenInterface;
+use Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface;
+use Xervice\User\Business\UserFacade;
 
 class GithubAuth implements GithubAuthInterface
 {
     /**
-     * @var \Xervice\User\UserFacade
+     * @var \Xervice\User\Business\UserFacade
      */
     private $userFacade;
 
     /**
-     * @var \Xervice\GithubAuth\Business\Auth\AccessTokenInterface
+     * @var \Xervice\GithubAuth\Business\Model\Auth\AccessTokenInterface
      */
     private $accessToken;
 
     /**
-     * @var \Xervice\GithubAuth\Business\Api\GithubClientInterface
+     * @var \Xervice\GithubAuth\Business\Model\Api\GithubClientInterface
      */
     private $githubClient;
 
     /**
-     * @var \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @var \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
     private $errorUrl;
 
     /**
      * GithubAuth constructor.
      *
-     * @param \Xervice\User\UserFacade $userFacade
-     * @param \Xervice\GithubAuth\Business\Auth\AccessTokenInterface $accessToken
-     * @param \Xervice\GithubAuth\Business\Api\GithubClientInterface $githubClient
-     * @param \Xervice\GithubAuth\Business\Query\QueryBuilderInterface $errorUrl
+     * @param \Xervice\User\Business\UserFacade $userFacade
+     * @param \Xervice\GithubAuth\Business\Model\Auth\AccessTokenInterface $accessToken
+     * @param \Xervice\GithubAuth\Business\Model\Api\GithubClientInterface $githubClient
+     * @param \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface $errorUrl
      */
     public function __construct(
         UserFacade $userFacade,
@@ -63,7 +62,6 @@ class GithubAuth implements GithubAuthInterface
      * @param string $code
      *
      * @return \DataProvider\UserAuthDataProvider
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Propel\Runtime\Exception\PropelException
      * @throws \Xervice\User\Business\Exception\UserException
      */
@@ -82,11 +80,13 @@ class GithubAuth implements GithubAuthInterface
         $user = $this->userFacade->getUserFromEmail($newUser->getEmail());
         if (!$user->hasUserId()) {
             $user = $this->createNewGithubUser($token, $newUser);
-        } elseif (!$this->userHaveLoginType($user)) {
+        }
+        elseif (!$this->userHaveLoginType($user)) {
             $login = $this->getGithubLoginType($token);
             $user->addUserLogin($login);
             $this->userFacade->updateUser($user);
-        } else {
+        }
+        else {
             foreach ($user->getUserLogins() as $login) {
                 if ($login->getType() === 'Github') {
                     $login->getUserCredential()->setHash($token->getAccessToken());
@@ -102,7 +102,8 @@ class GithubAuth implements GithubAuthInterface
             ->setUser($user)
             ->setCredential(
                 (new UserCredentialDataProvider())->setHash($token->getAccessToken())
-            );
+            )
+            ;
     }
 
     /**
@@ -124,8 +125,7 @@ class GithubAuth implements GithubAuthInterface
     /**
      * @param string $code
      *
-     * @return \DataProvider\GithubAccessTokenRequestDataProvider|\DataProvider\GithubAccessTokenResponseDataProvider
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return \DataProvider\GithubAccessTokenResponseDataProvider
      */
     private function getTokenFromGithub(string $code): GithubAccessTokenResponseDataProvider
     {
@@ -134,50 +134,53 @@ class GithubAuth implements GithubAuthInterface
             ->setCode($code)
             ->setRedirectUrl(
                 $this->errorUrl->getUrl()
-            );
+            )
+        ;
 
         return $this->accessToken->getAccessToken($token);
-}
+    }
 
     /**
      * @param \DataProvider\GithubAccessTokenResponseDataProvider $token
      *
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function getEmailsFromGithub(GithubAccessTokenResponseDataProvider $token): array
     {
         $userRequest = new GithubRequestDataProvider();
         $userRequest
             ->setAccessToken($token->getAccessToken())
-            ->setApiUrl('/user/emails');
+            ->setApiUrl('/user/emails')
+        ;
 
         return $this->githubClient->getFromGithub($userRequest);
     }
 
     /**
-     * @param $token
-     * @param $newUser
+     * @param \DataProvider\GithubAccessTokenResponseDataProvider $token
+     * @param \DataProvider\UserDataProvider $newUser
      *
      * @return \DataProvider\UserDataProvider
      * @throws \Propel\Runtime\Exception\PropelException
      * @throws \Xervice\User\Business\Exception\UserException
      */
-    private function createNewGithubUser($token, $newUser): \DataProvider\UserDataProvider
-    {
+    private function createNewGithubUser(
+        GithubAccessTokenResponseDataProvider $token,
+        UserDataProvider $newUser
+    ): UserDataProvider {
         $login = $this->getGithubLoginType($token);
         $newUser->addUserLogin($login);
 
         $user = $this->userFacade->createUser($newUser);
         return $user;
-}
+    }
 
     /**
-     * @param $token
+     * @param \DataProvider\GithubAccessTokenResponseDataProvider $token
      *
      * @return \DataProvider\UserLoginDataProvider
      */
-    private function getGithubLoginType($token): \DataProvider\UserLoginDataProvider
+    private function getGithubLoginType(GithubAccessTokenResponseDataProvider $token): UserLoginDataProvider
     {
         $credentials = new UserCredentialDataProvider();
         $credentials->setHash($token->getAccessToken());
@@ -188,5 +191,5 @@ class GithubAuth implements GithubAuthInterface
             ->setUserCredential($credentials);
 
         return $login;
-}
+    }
 }

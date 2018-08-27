@@ -9,25 +9,34 @@
   ],
   "require-dev": {
     "codeception/codeception": "*",
-    "symfony/var-dumper": "*"
+    "symfony/var-dumper": "*",
+    "phpstan/phpstan": "*"
   },
   "require": {
     "php": ">=7.1.0",
-    "xervice/data-provider": "^1.4.4",
-    "xervice/user": "^1.2.0",
-    "xervice/controller": "1.2.0",
-    "xervice/logger": "^1.0.0",
+    "xervice/core": "^4.0.0",
+    "xervice/data-provider": "^2.0.0",
+    "xervice/user": "^2.0.0",
+    "xervice/controller": "2.0.0",
+    "xervice/logger": "^2.0.0",
     "guzzlehttp/guzzle": "^6.3.3",
     "propel/propel": "2.0.0-alpha8"
   },
   "autoload": {
     "psr-4": {
-      "XerviceTest\\": "tests/Xervice/",
       "DataProvider\\": "src/Generated/"
     },
     "psr-0": {
       "Xervice\\": "src/",
       "Orm\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "XerviceTest\\": "tests/Xervice/"
+    }
+  },
+  "scripts": {
+    "phpstan": "vendor/bin/phpstan analyse src/Xervice --level=7"
   }
 }

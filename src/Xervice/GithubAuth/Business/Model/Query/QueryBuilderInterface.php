@@ -1,13 +1,13 @@
 <?php
 
-namespace Xervice\GithubAuth\Business\Query;
+namespace Xervice\GithubAuth\Business\Model\Query;
 
 interface QueryBuilderInterface
 {
     /**
      * @param array $params
      *
-     * @return \Xervice\GithubAuth\Business\Query\QueryBuilderInterface
+     * @return \Xervice\GithubAuth\Business\Model\Query\QueryBuilderInterface
      */
     public function appendParams(array $params): QueryBuilderInterface;
 

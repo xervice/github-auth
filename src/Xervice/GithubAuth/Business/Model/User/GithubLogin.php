@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Xervice\GithubAuth\Business\User;
+namespace Xervice\GithubAuth\Business\Model\User;
 
 
 use DataProvider\UserAuthDataProvider;
 use DataProvider\UserCredentialDataProvider;
-use Xervice\User\Business\Authenticator\Login\LoginInterface;
+use Xervice\User\Business\Dependency\Authenticator\Login\LoginInterface;
 
 class GithubLogin implements LoginInterface
 {

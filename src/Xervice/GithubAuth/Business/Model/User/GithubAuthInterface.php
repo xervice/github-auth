@@ -1,6 +1,6 @@
 <?php
 
-namespace Xervice\GithubAuth\Business\User;
+namespace Xervice\GithubAuth\Business\Model\User;
 
 
 use DataProvider\UserAuthDataProvider;

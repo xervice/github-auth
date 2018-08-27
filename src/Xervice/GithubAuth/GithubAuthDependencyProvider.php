@@ -1,28 +1,26 @@
 <?php
-
+declare(strict_types=1);
 
 namespace Xervice\GithubAuth;
 
+use Xervice\Core\Business\Model\Dependency\DependencyContainerInterface;
+use Xervice\Core\Business\Model\Dependency\Provider\AbstractDependencyProvider;
 
-use Xervice\Core\Dependency\DependencyProviderInterface;
-use Xervice\Core\Dependency\Provider\AbstractProvider;
-
-class GithubAuthDependencyProvider extends AbstractProvider
+class GithubAuthDependencyProvider extends AbstractDependencyProvider
 {
     public const USER_FACADE = 'user.facade';
     public const LOG_FACADE = 'log.facade';
 
-    /**
-     * @param \Xervice\Core\Dependency\DependencyProviderInterface $dependencyProvider
-     */
-    public function handleDependencies(DependencyProviderInterface $dependencyProvider): void
+    public function handleDependencies(DependencyContainerInterface $container): DependencyContainerInterface
     {
-        $dependencyProvider[self::USER_FACADE] = function (DependencyProviderInterface $dependencyProvider) {
-            return $dependencyProvider->getLocator()->user()->facade();
+        $container[self::USER_FACADE] = function (DependencyContainerInterface $container) {
+            return $container->getLocator()->user()->facade();
         };
 
-        $dependencyProvider[self::LOG_FACADE] = function (DependencyProviderInterface $dependencyProvider) {
-            return $dependencyProvider->getLocator()->logger()->facade();
+        $container[self::LOG_FACADE] = function (DependencyContainerInterface $container) {
+            return $container->getLocator()->logger()->facade();
         };
+
+        return $container;
     }
 }
